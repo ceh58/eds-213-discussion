@@ -61,7 +61,7 @@ library(lubridate)
 
 # -------- Water Temp --------
 # Read in filenames for all LTER sites
-water_temp_filenames <- list.files(here("moorea-LTER-data", "benthic-water-temp"), full.names=TRUE)
+water_temp_filenames <- list.files("/Users/choyt/MEDS/eds213-databases/eds-213-discussion/moorrea-LTER-data/benthic-water-temp", full.names=TRUE)
 
 # Create an empty list
 all_LTER_sites_water <- vector("list", length = length(water_temp_filenames))
@@ -81,7 +81,7 @@ benthic_water_temp <- bind_rows(all_LTER_sites_water) %>%
   clean_names()
 
 # -------- Crown of Thorns Abundance --------
-ac_abundance <- read_csv(here("moorea-LTER-data", "MCR_LTER_COTS_abundance_2005-2022_20220503.csv"), show_col_types = FALSE) %>%
+ac_abundance <- read_csv("/Users/choyt/MEDS/eds213-databases/eds-213-discussion/moorrea-LTER-data/MCR_LTER_COTS_abundance_2005-2022_20220503.csv", show_col_types = FALSE) %>%
   clean_names()
 ```
 
@@ -94,7 +94,7 @@ benthic_water_temp_cleaned <- benthic_water_temp %>%
   mutate(time_local = as_date(time_local)) %>%
   mutate(year = year(time_local)) %>%
   # Find average water temp by site and year
-  group_by(site, year) %>%
+  group_by(year, site) %>%
   summarise(avg_year_temp_c = mean(temperature_c))
 
 # Clean ac abundance data
@@ -108,13 +108,41 @@ ac_abundance_cleaned <- ac_abundance %>%
     site == "LTER 5" ~ "LTER05",
     site == "LTER 6" ~ "LTER06"
   )) %>%
-  rename(a_planci_counts = cots)
+  rename(a_planci_counts = cots)%>%
+  group_by(year, site) %>%
+  summarise(a_planci_counts = sum(a_planci_counts, na.rm = TRUE))
+
+write_csv(benthic_water_temp_cleaned, "/Users/choyt/MEDS/eds213-databases/eds-213-discussion/moorrea-LTER-data/benthic_water_temp_cleaned.csv")
+
+write_csv(ac_abundance_cleaned, "/Users/choyt/MEDS/eds213-databases/eds-213-discussion/moorrea-LTER-data/ac_abundance_cleaned.csv")
 ```
 
 ## Join Data
 
 ```{r}
 # Left join water temp to ac abundance 
-temp_counts_joined <- left_join(ac_abundance_cleaned, benthic_water_temp_cleaned, by = c("site", "year"))
+#temp_counts_joined <- left_join(ac_abundance_cleaned, benthic_water_temp_cleaned, by = c("site", "year"))
 ```
 
+## Create Database
+
+.open moorea-LTER.db
+CREATE TABLE Abundance (
+  year INT PRIMARY KEY
+  site VARCHAR PRIMARY KEY
+  UNIQUE (year, site)
+  habitat VARCHAR
+  transect INT
+  a_planci_counts INT
+);
+
+COPY Abundance FROM ac_abundance_cleaned (header TRUE);
+
+CREATE TABLE Water_temp (
+  year INT
+  site VARCHAR
+  UNIQUE (year, site)
+  avg_year_temp_c REAL
+);
+
+COPY Water_temp FROM benthic_water_temp_cleaned (header TRUE);
