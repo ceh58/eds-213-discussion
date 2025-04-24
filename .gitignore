@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 moorea-LTER-data/
+clean-data/
+moorea-LTER.db
