@@ -19,7 +19,7 @@ Two time series were selected:
   - temp (C)
   - sites 1-6 (each as individual .csv files)
 
-2. [Population Dynamics of Acanthaster planci (crown of thorns starfish)](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-mcr.1039.11)
+2. [Population Dynamics of Acanthaster planci (crown of thorns starfish)](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-mcr.1039.11):
   - 2005-2022
   - counts
   - sites 1-6 (one .csv file)
@@ -50,4 +50,4 @@ Data was housed in a moorea-LTER-data/ folder, cleaned in R, and loaded in to mo
 └── moorea_LTER.sql
 ```
 
-![starfish](starfish.png)
+<img src="starfish.png" alt="starfish" style="width:50%;">
