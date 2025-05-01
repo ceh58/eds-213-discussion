@@ -6,7 +6,7 @@ Carmen Hoyt [@ceh58](https://github.com/ceh58)
 
 ## About 
 
-This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and Acanthaster planci abundance counts, and the resulting analysis.
+This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and Acanthaster planci abundance counts, and the resulting analysis. The analysis aims to answer the question: **"How does benthic water temperature relate to crown of thorn abundance?"**
 
 ## Data
 
@@ -24,7 +24,7 @@ Two time series were selected:
   - counts
   - sites 1-6 (one .csv file)
 
-Data was housed in a moorea-LTER-data/ folder, cleaned in R, and loaded in to moorea_LTER.db using DuckDB. 
+Data was housed in a moorea-LTER-data/ folder, cleaned in R, and loaded in to moorea_LTER.db using DuckDB. Visualizations were produced using {ggplot}, a part of the {tidyverse},in R.
 
 ## Repository Structure
 
