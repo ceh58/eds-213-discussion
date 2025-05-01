@@ -50,4 +50,4 @@ Data was housed in a moorea-LTER-data/ folder, cleaned in R, and loaded in to mo
 └── moorea_LTER.sql
 ```
 
-![starfish](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nationalgeographic.com%2Fenvironment%2Farticle%2Fcrown-of-thorns-sea-stars-coral-reefs&psig=AOvVaw1vx7EX_db1Rg_OArnJ_kMv&ust=1746221632733000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjundOcg40DFQAAAAAdAAAAABAE)
+![starfish](starfish.png)
