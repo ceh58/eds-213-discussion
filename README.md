@@ -6,7 +6,9 @@ Carmen Hoyt [@ceh58](https://github.com/ceh58)
 
 ## About 
 
-This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and Acanthaster planci abundance counts, and the resulting analysis. The analysis aims to answer the question: **"How does benthic water temperature relate to crown of thorn abundance?"**
+**"How does benthic water temperature relate to crown of thorn abundance?"**
+
+This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and Acanthaster planci abundance counts, and the resulting analysis. 
 
 ## Data
 
