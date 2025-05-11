@@ -93,9 +93,11 @@ benthic_water_temp_cleaned <- benthic_water_temp %>%
   # Extract year from time_local
   mutate(time_local = as_date(time_local)) %>%
   mutate(year = year(time_local)) %>%
-  # Find average water temp by site and year
-  group_by(site, year) %>%
-  summarise(avg_year_temp_c = mean(temperature_c))
+  select(-c(time_utc))
+
+sum(is.na(benthic_water_temp_cleaned$temperature_c)) #0
+unique(benthic_water_temp_cleaned$year)
+unique(benthic_water_temp_cleaned$site)
 
 # Clean ac abundance data
 ac_abundance_cleaned <- ac_abundance %>%
@@ -109,12 +111,20 @@ ac_abundance_cleaned <- ac_abundance %>%
     site == "LTER 6" ~ "LTER06"
   )) %>%
   rename(a_planci_counts = cots)
+
+sum(is.na(ac_abundance_cleaned$a_planci_counts))
+unique(ac_abundance_cleaned$year)
+unique(ac_abundance_cleaned$site)
+
+write_csv(benthic_water_temp_cleaned, here("clean-data", "benthic_water_temp_cleaned.csv"))
+
+write_csv(ac_abundance_cleaned, here("clean-data", "ac_abundance_cleaned.csv"))
 ```
 
 ## Join Data
 
 ```{r}
 # Left join water temp to ac abundance 
-temp_counts_joined <- left_join(ac_abundance_cleaned, benthic_water_temp_cleaned, by = c("site", "year"))
+#temp_counts_joined <- left_join(ac_abundance_cleaned, benthic_water_temp_cleaned, by = c("site", "year"))
 ```
 
