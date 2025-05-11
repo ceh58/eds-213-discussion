@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+moorea-LTER-data/
+clean-data/
+moorea-LTER.db
+.DS_Store
