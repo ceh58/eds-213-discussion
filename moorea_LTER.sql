@@ -38,7 +38,7 @@ SELECT * FROM Water_temp;
 -- Answer questions
 --- How does benthic water temperature relate to crown of thorn abundance? By habitat type?
 
-CREATE TEMP TABLE final AS (
+CREATE TABLE final AS (
   SELECT 
   at.site, 
   AVG(at.avg_temp) AS avg_temp, 
@@ -62,7 +62,7 @@ SELECT * FROM abundance;
 
 ---------------------------------------------------------
 
-CREATE TEMP TABLE final_habitat AS (
+CREATE TABLE final_habitat AS (
   SELECT 
     at.site, 
     sa.habitat,
