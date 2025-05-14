@@ -1,6 +1,6 @@
 ---
 title: "Connecting duckdb"
-author: "Rachel Swick"
+author: "Carmen Hoyt"
 format: html
 editor: visual
 editor_options: 
@@ -16,7 +16,7 @@ library(duckdb)
 Let's connect to our database
 
 ```{r}
-conn <- DBI::dbConnect(duckdb::duckdb(), dbdir="database/database.db")
+conn <- DBI::dbConnect(duckdb::duckdb(), dbdir="moorea-LTER.db")
 ```
 
 Let's look at our tables
@@ -26,26 +26,28 @@ DBI::dbListTables(conn)
 ```
 
 Look at an entire table
+
 ```{r}
-species <- tbl(conn, "Species")
-species
+Abundance <- tbl(conn, "Abundance")
+Abundance
 ```
 
 ## Let's do our first query
 
 ```{r}
-species_a <- dbGetQuery(conn, "SELECT * FROM Species WHERE Code LIKE '%a'")
+site_1 <- dbGetQuery(conn, "SELECT * FROM Abundance WHERE site LIKE '%01'")
 ```
 
 #### There is a better way
+
 ```{r}
 library(dbplyr)
 ```
 
 ```{r}
-species %>% 
-  filter(Relevance == "Study Species") %>% 
-  select(Code, Scientific_name) %>% 
+Abundance %>% 
+  filter(habitat == "Backreef") %>% 
+  select(year, a_planci_counts) %>% 
   show_query()
 ```
 
@@ -77,7 +79,6 @@ species %>%
   show_query()
 ```
 
-
 ## How do we get the full data
 
 ```{r}
@@ -86,7 +87,6 @@ species_X <- species %>%
   # Need to use `collect()` in order to actually return all of the applicable data on the database
   collect()
 ```
-
 
 ## You can do joins!!
 
@@ -103,18 +103,3 @@ nest_join <- left_join(nests_db, eggs_db, by = "Nest_ID", keep=FALSE) %>%
 ```{r}
 DBI::dbDisconnect(conn, shutdown = TRUE)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
