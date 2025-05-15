@@ -38,8 +38,9 @@ SELECT * FROM Water_temp;
 -- Answer questions
 --- How does benthic water temperature relate to crown of thorn abundance? By habitat type?
 
-CREATE TABLE final AS (
+CREATE TABLE final_year AS (
   SELECT 
+  at.year,
   at.site, 
   AVG(at.avg_temp) AS avg_temp, 
   SUM(sa.abundance) AS abundance
@@ -53,7 +54,7 @@ JOIN (
   FROM Abundance
   GROUP BY site, year
 ) sa USING (site, year)
-GROUP BY at.site
+GROUP BY at.site, at.year
 );
 
 SELECT * FROM final;
