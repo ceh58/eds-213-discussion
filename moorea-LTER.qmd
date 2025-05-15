@@ -52,6 +52,8 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(lubridate)
+library(DBI)
+library(duckdb)
 ```
 
 ## Load Data
@@ -124,3 +126,58 @@ write_csv(ac_abundance_cleaned, here("clean-data", "ac_abundance_cleaned.csv"))
 ## Create Database
 
 See moorea-LTER.sql
+
+## Creat Visualization
+
+```{r}
+# Connect to database
+conn <- DBI::dbConnect(duckdb::duckdb(), dbdir="moorea-LTER.db")
+
+# Look at tables
+DBI::dbListTables(conn)
+
+# Import final table for vis
+final <- tbl(conn, "final")
+final_year <- tbl(conn, "final_year")
+final_habitat <- tbl(conn, "final_habitat")
+
+final_df <- dbGetQuery(conn, "SELECT * FROM final")
+final_year_df <- dbGetQuery(conn, "SELECT * FROM final_year")
+final_habitat_df <- dbGetQuery(conn, "SELECT * FROM final_habitat")
+
+
+ggplot(final_df, aes(avg_temp, abundance)) +
+  geom_line()
+
+
+final_year_df %>%
+  group_by(year) %>%
+  summarise(avg_temp = mean(avg_temp),
+            total_abundance = sum(abundance)) %>%
+ggplot(aes(year, total_abundance)) +
+  geom_line()
+
+final_year_df %>%
+  group_by(year) %>%
+  summarise(avg_temp = mean(avg_temp),
+            total_abundance = sum(abundance)) %>%
+ggplot(aes(x = year)) +
+  geom_line(aes(y = total_abundance), color = "blue", size = 1) +
+  geom_line(aes(y = avg_temp), color = "red", size = 1, linetype = "dashed") +  # scale temp for visualization
+  scale_y_continuous(
+    name = "Total Abundance",
+    sec.axis = sec_axis(~./5, name = "Average Temperature (°C)")
+  ) +
+  labs(title = "Abundance and Temperature by Year") +
+  theme_minimal()
+
+
+
+
+ggplot(final_year_df, aes(year, abundance, color = site)) +
+  geom_line()
+
+DBI::dbDisconnect(conn, shutdown = TRUE)
+```
+```
+
