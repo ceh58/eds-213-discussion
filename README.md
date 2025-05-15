@@ -6,9 +6,9 @@ Carmen Hoyt [@ceh58](https://github.com/ceh58)
 
 ## About 
 
-**"How does benthic water temperature relate to crown of thorn abundance?"**
+**Does benthic water temperature correlate with crown of thorns abundance?**
 
-This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and Acanthaster planci abundance counts, and the resulting analysis. 
+This repository hosts the code for creating a SQL database for Moorea LTER data, specifically benthic water temperature and *Acanthaster planci* abundance counts, and the resulting analysis. 
 
 ## Data
 
@@ -49,7 +49,12 @@ Data was housed in a moorea-LTER-data/ folder, cleaned in R, and loaded in to mo
 |    └── Water_abundance_combined
 ├── eds-213-discussion.Rproj
 ├── moorea-LTER.qmd
-└── moorea_LTER.sql
+├── moorea_LTER.sql
+└── starfish.png # for fun!
 ```
+
+## Acknowledgements
+
+Thank you to EDS 213 for assigning this project!
 
 <img src="starfish.png" alt="starfish" style="width:50%;">

@@ -36,7 +36,7 @@ SELECT * FROM Abundance;
 SELECT * FROM Water_temp;
 
 -- Answer questions
---- How does benthic water temperature relate to crown of thorn abundance? By habitat type?
+--- Does benthic water temperature correlate with crown of thorns abundance?
 
 CREATE TABLE final_year AS (
   SELECT 
@@ -57,118 +57,6 @@ JOIN (
 GROUP BY at.site, at.year
 );
 
-SELECT * FROM final;
+-- check
+SELECT * FROM final_year;
 
-SELECT * FROM abundance;
-
----------------------------------------------------------
-
-CREATE TABLE final_habitat_year AS (
-  SELECT 
-    at.year,
-    at.site, 
-    sa.habitat,
-    AVG(at.avg_temp) AS avg_temp, 
-    SUM(sa.abundance) AS abundance
-  FROM (
-    SELECT site, year, AVG(temperature_c) AS avg_temp
-    FROM Water_temp
-    GROUP BY site, year
-  ) at
-  JOIN (
-    SELECT site, year, habitat, SUM(a_planci_counts) AS abundance
-    FROM Abundance
-    GROUP BY site, year, habitat
-  ) sa USING (site, year)
-  GROUP BY at.site, sa.habitat, at.year
-);
-
-SELECT * FROM final_habitat_year2;
-
----------------------------------------------------------
-
-
--- Sum abundance by year and site
-CREATE TABLE sum_abundance AS (
-  SELECT year, site, SUM(a_planci_counts) AS abundance
-  FROM Abundance
-  GROUP BY year, site
-);
-
--- Average water temp by year and site
-CREATE TABLE avg_temp AS (
-  SELECT year, site, AVG(temperature_c) AS avg_temp
-  FROM Water_temp
-  GROUP BY year, site
-);
-
-CREATE TABLE temp_abundance AS (
-  SELECT site, year, avg_temp, abundance 
-  FROM avg_temp 
-  JOIN sum_abundance USING (site, year)
-  GROUP BY site, year, avg_temp, abundance
-);
-
--- Group by site over all years
-SELECT site, AVG(avg_temp) AS avg_temp, SUM(abundance) AS abundance
-  FROM temp_abundance
-  GROUP BY site;
-
--- Look at LTER01 site over all years
-SELECT site, year, avg_temp, SUM(abundance) AS abundance
-FROM temp_abundance
-WHERE site = 'LTER01'
-GROUP BY site, year, avg_temp
-ORDER BY year DESC;
-
-CREATE TABLE Final_table AS(
-SELECT site, year, avg_temp, SUM(abundance) AS abundance
-FROM temp_abundance
-GROUP BY site, year, avg_temp
-ORDER BY year DESC
-);
-
--- by habitat type
---- Sum abundance by year and habitat
-CREATE TEMP TABLE sum_abundance_habitat AS (
-  SELECT year, habitat, SUM(a_planci_counts) AS abundance
-  FROM Abundance
-  GROUP BY year, habitat
-);
-
-SELECT * FROM sum_abundance_habitat;
-
--- average water temp by year and habitat
-CREATE TEMP TABLE avg_temp_habitat AS (
-  SELECT year, reef_type_code, AVG(temperature_c) AS avg_temp
-  FROM Water_temp
-  GROUP BY year, reef_type_code
-);
-
--------------------------------------------------------
-
-CREATE TABLE temp_abundance AS (
-  SELECT site, year, avg_temp, abundance 
-  FROM avg_temp 
-  JOIN sum_abundance USING (site, year)
-  GROUP BY site, year, avg_temp, abundance
-);
-
--- group by site over all years
-SELECT site, AVG(avg_temp) AS avg_temp, SUM(abundance) AS abundance
-  FROM temp_abundance
-  GROUP BY site;
-
--- look at LTER01 site over all years
-SELECT site, year, avg_temp, SUM(abundance) AS abundance
-FROM temp_abundance
-WHERE site = 'LTER01'
-GROUP BY site, year, avg_temp
-ORDER BY year DESC;
-
-CREATE TABLE Final_table AS(
-SELECT site, year, avg_temp, SUM(abundance) AS abundance
-FROM temp_abundance
-GROUP BY site, year, avg_temp
-ORDER BY year DESC
-);
