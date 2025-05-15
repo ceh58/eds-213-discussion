@@ -63,8 +63,9 @@ SELECT * FROM abundance;
 
 ---------------------------------------------------------
 
-CREATE TABLE final_habitat AS (
+CREATE TABLE final_habitat_year AS (
   SELECT 
+    at.year,
     at.site, 
     sa.habitat,
     AVG(at.avg_temp) AS avg_temp, 
@@ -79,10 +80,10 @@ CREATE TABLE final_habitat AS (
     FROM Abundance
     GROUP BY site, year, habitat
   ) sa USING (site, year)
-  GROUP BY at.site, sa.habitat
+  GROUP BY at.site, sa.habitat, at.year
 );
 
-SELECT * FROM final_habitat;
+SELECT * FROM final_habitat_year2;
 
 ---------------------------------------------------------
 
